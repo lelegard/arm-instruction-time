@@ -1,0 +1,11 @@
+nop                  0.525 ns/inst
+add                  0.262 ns/inst
+adc                  0.261 ns/inst
+adds                 0.279 ns/inst
+adcs                 0.522 ns/inst
+mul                  1.637 ns/inst
+div                  4.981 ns/inst
+mul_umulh            1.916 ns/inst
+mul_adcs_umulh_adcs  0.940 ns/inst
+mul_adcs             0.801 ns/inst
+mul_add_umulh_add    0.941 ns/inst
