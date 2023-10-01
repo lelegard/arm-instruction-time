@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <inttypes.h>
 #if defined(__linux__)
 #include <sys/auxv.h>
 #endif
@@ -13,7 +14,13 @@
 int has_pac()
 {
 #if defined(__APPLE__)
-    return 1; // supported on all Apple Silicon chips
+    // PAC is supported on all Apple Silicon chips.
+    // But can disabled at application or system level (arch arm64 vs. arm64e).
+    // Check if PAC instructions are muted (arch arm64).
+    uint64_t in = 0x12345678;
+    uint64_t out = in;
+    asm("pacia %[reg], sp" : [reg] "+r" (out));
+    return in != out;
 #else
     return (getauxval(AT_HWCAP) & HWCAP_PACA) != 0;
 #endif

@@ -54,7 +54,7 @@
         movk    x1, #0x89AB, lsl 16
         movk    x1, #0x4567, lsl 32
         movk    x1, #0x0123, lsl 48
-        mov     x2, #0x3210             // x2 = 0FEDCBA9876543210
+        mov     x2, #0x3210             // x2 = 0xFEDCBA9876543210
         movk    x2, #0x7654, lsl 16
         movk    x2, #0xBA98, lsl 32
         movk    x2, #0xFEDC, lsl 48

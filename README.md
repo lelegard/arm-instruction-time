@@ -41,11 +41,21 @@ The Apple M1 CPU was tested using macOS. All other CPU's were tested on Linux.
 | MUL ADCS UMULH ADCS                 | 0.940      |             |             | 0.147    |
 | MUL ADCS                            | 0.801      |             |             | 0.147    |
 | MUL ADD UMULH ADD                   | 0.941      |             |             | 0.095    |
-| PACIA                               | n/a        |             |             | 0.033    |
-| AUTIA                               | n/a        |             |             | 0.033    |
-| PACIA AUTIA ...                     | n/a        |             |             | 0.033    |
-| PACIA ... AUTIA ...                 | n/a        |             |             | 0.033    |
+| PACIA                               | n/a        |             |             | 0.303    |
+| AUTIA                               | n/a        |             |             | 0.303    |
+| PACIA AUTIA ...                     | n/a        |             |             | 0.303    |
+| PACIA ... AUTIA ...                 | n/a        |             |             | 0.303    |
 
-Depending on the CPU, consecutive executions produce slightly different results.
+Depending on the CPU, consecutive executions of the test program produce slightly different results.
 However, the difference remains on the third decimal, meaning a few picoseconds.
 This difference can be considered as negligible.
+
+The PAC instructions can be evaluated on Armv8.3-A onwards only. On older CPU cores,
+the PAC tests are automatically skipped.
+
+On macOS, all Apple Silicon chips support PAC. However, PAC instructions can be
+disabled at system or application level (architecture `arm64` vs. `arm46e`,
+[more details here](https://github.com/lelegard/arm-cpusysregs/blob/main/docs/arm64e-on-macos.md)).
+When PAC instructions are disabled (architecture `arm64`), they execute at the speed of a NOP.
+Therefore, the PAC tests are skipped in this configuration to avoid reporting
+non-significant instruction time.
