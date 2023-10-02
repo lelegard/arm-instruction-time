@@ -36,6 +36,7 @@ The Apple M1 CPU was tested using macOS. All other CPU's were tested on Linux.
 | ADDS                                | 0.279      | 0.098       | 0.119       | 0.098    |
 | ADCS                                | 0.522      | 0.313       | 0.376       | 0.303    |
 | MUL                                 | 1.637      | 0.981       | 0.181       | 0.147    |
+| UMULH                               | 2.191      | 1.315       | 0.181       | 0.147    |
 | UDIV                                | 4.981      | 2.985       | 4.226       | 0.616    |
 | MUL UMULH                           | 1.916      | 1.148       | 0.181       | 0.147    |
 | MUL ADCS UMULH ADCS                 | 0.940      | 0.564       | 0.282       | 0.147    |

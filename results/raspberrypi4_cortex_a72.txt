@@ -4,6 +4,7 @@ adc                  0.261 ns/inst
 adds                 0.279 ns/inst
 adcs                 0.522 ns/inst
 mul                  1.637 ns/inst
+umulh                2.191 ns/inst
 div                  4.981 ns/inst
 mul_umulh            1.916 ns/inst
 mul_adcs_umulh_adcs  0.940 ns/inst
