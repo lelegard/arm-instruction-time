@@ -133,6 +133,14 @@
         .endr
         xxx_end
 
+        xxx_begin xxx_umulh
+        .rept   2
+        .irp    reg,ALL_REGS
+        umulh   x\reg, x1, x2
+        .endr
+        .endr
+        xxx_end
+
         xxx_begin xxx_div
         .rept   2
         .irp    reg,ALL_REGS

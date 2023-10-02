@@ -42,6 +42,7 @@ int main(int argc, char* argv[])
     TEST(adds, REFCOUNT);
     TEST(adcs, REFCOUNT);
     TEST(mul, REFCOUNT);
+    TEST(umulh, REFCOUNT);
     TEST(div, REFCOUNT);
     TEST(mul_umulh, REFCOUNT);
     TEST(mul_adcs_umulh_adcs, REFCOUNT);
