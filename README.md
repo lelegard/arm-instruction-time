@@ -30,21 +30,21 @@ The Apple M1 CPU was tested using macOS. All other CPU's were tested on Linux.
 
 | Mean instruction time (nanoseconds) | Cortex A72 | Neoverse N1 | Neoverse V1 | Apple M1 |
 | ----------------------------------- | :--------: | :---------: | :---------: | :------: |
-| NOP                                 | 0.525      |             |             | 0.033    |
-| ADD                                 | 0.262      |             |             | 0.061    |
-| ADC                                 | 0.261      |             |             | 0.098    |
-| ADDS                                | 0.279      |             |             | 0.098    |
-| ADCS                                | 0.522      |             |             | 0.303    |
-| MUL                                 | 1.637      |             |             | 0.147    |
-| UDIV                                | 4.981      |             |             | 0.616    |
-| MUL UMULH                           | 1.916      |             |             | 0.147    |
-| MUL ADCS UMULH ADCS                 | 0.940      |             |             | 0.147    |
-| MUL ADCS                            | 0.801      |             |             | 0.147    |
-| MUL ADD UMULH ADD                   | 0.941      |             |             | 0.095    |
-| PACIA                               | n/a        |             |             | 0.303    |
-| AUTIA                               | n/a        |             |             | 0.303    |
-| PACIA AUTIA ...                     | n/a        |             |             | 0.303    |
-| PACIA ... AUTIA ...                 | n/a        |             |             | 0.303    |
+| NOP                                 | 0.525      | 0.071       | 0.024       | 0.033    |
+| ADD                                 | 0.262      | 0.094       | 0.087       | 0.061    |
+| ADC                                 | 0.261      | 0.094       | 0.087       | 0.098    |
+| ADDS                                | 0.279      | 0.098       | 0.119       | 0.098    |
+| ADCS                                | 0.522      | 0.313       | 0.376       | 0.303    |
+| MUL                                 | 1.637      | 0.981       | 0.181       | 0.147    |
+| UDIV                                | 4.981      | 2.985       | 4.226       | 0.616    |
+| MUL UMULH                           | 1.916      | 1.148       | 0.181       | 0.147    |
+| MUL ADCS UMULH ADCS                 | 0.940      | 0.564       | 0.282       | 0.147    |
+| MUL ADCS                            | 0.801      | 0.480       | 0.183       | 0.147    |
+| MUL ADD UMULH ADD                   | 0.941      | 0.564       | 0.111       | 0.095    |
+| PACIA                               | n/a        | n/a         | 0.373       | 0.303    |
+| AUTIA                               | n/a        | n/a         | 0.373       | 0.303    |
+| PACIA AUTIA ...                     | n/a        | n/a         | 0.373       | 0.303    |
+| PACIA ... AUTIA ...                 | n/a        | n/a         | 0.373       | 0.303    |
 
 Depending on the CPU, consecutive executions of the test program produce slightly different results.
 However, the difference remains on the third decimal, meaning a few picoseconds.

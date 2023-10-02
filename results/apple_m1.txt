@@ -9,7 +9,7 @@ mul_umulh            0.147 ns/inst
 mul_adcs_umulh_adcs  0.147 ns/inst
 mul_adcs             0.147 ns/inst
 mul_add_umulh_add    0.095 ns/inst
-pacia                0.033 ns/inst
-autia                0.033 ns/inst
-pacia_autia          0.033 ns/inst
-pacia_autia_2        0.033 ns/inst
+pacia                0.303 ns/inst
+autia                0.303 ns/inst
+pacia_autia          0.303 ns/inst
+pacia_autia_2        0.303 ns/inst
