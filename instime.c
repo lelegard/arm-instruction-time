@@ -27,32 +27,36 @@ int has_pac()
 }
 
 // Declare and run one test.
-#define TEST(name, iterations) \
-    extern double xxx_##name(int64_t count) asm("xxx_"#name); \
-    printf("%-20s %.3f ns/inst\n", #name, xxx_##name(iterations))
+#define TEST(name, iterations, bool_empty_loop)                                         \
+    extern double xxx_##name(int64_t count, int64_t bel) asm("xxx_"#name);          \
+    printf("%-20s %.3f ns/inst\n", #name, xxx_##name(iterations, bool_empty_loop))
 
 // 100 million iterations as reference.
 #define REFCOUNT 100000000
 
 int main(int argc, char* argv[])
 {
-    TEST(nop, REFCOUNT * 4);
-    TEST(add, REFCOUNT);
-    TEST(adc, REFCOUNT);
-    TEST(adds, REFCOUNT);
-    TEST(adcs, REFCOUNT);
-    TEST(mul, REFCOUNT);
-    TEST(umulh, REFCOUNT);
-    TEST(div, REFCOUNT);
-    TEST(mul_umulh, REFCOUNT);
-    TEST(mul_adcs_umulh_adcs, REFCOUNT);
-    TEST(mul_adcs, REFCOUNT);
-    TEST(mul_add_umulh_add, REFCOUNT);
-    if (has_pac()) {
-        TEST(pacia, REFCOUNT);
-        TEST(autia, REFCOUNT);
-        TEST(pacia_autia, REFCOUNT);
-        TEST(pacia_autia_2, REFCOUNT);
+    for (int64_t bel = 0; bel < 2; bel++) {
+        printf("--- Empty loop time %s\n", bel ? "removed" : "ignored");
+        TEST(nop, REFCOUNT * 4, bel);
+        TEST(add, REFCOUNT, bel);
+        TEST(adc, REFCOUNT, bel);
+        TEST(adds, REFCOUNT, bel);
+        TEST(adcs, REFCOUNT, bel);
+        TEST(mul, REFCOUNT, bel);
+        TEST(umulh, REFCOUNT, bel);
+        TEST(div, REFCOUNT, bel);
+        TEST(mul_umulh, REFCOUNT, bel);
+        TEST(mul_adcs_umulh_adcs, REFCOUNT, bel);
+        TEST(mul_adcs, REFCOUNT, bel);
+        TEST(umulh_adcs, REFCOUNT, bel);
+        TEST(mul_add_umulh_add, REFCOUNT, bel);
+        if (has_pac()) {
+            TEST(pacia, REFCOUNT, bel);
+            TEST(autia, REFCOUNT, bel);
+            TEST(pacia_autia, REFCOUNT, bel);
+            TEST(pacia_autia_2, REFCOUNT, bel);
+        }
     }
     return EXIT_SUCCESS;
 }

@@ -34,7 +34,8 @@
         .endm
 
         // Prolog of all functions in this module.
-        // Profile: double func(int64_t iterations);
+        // Profile: double func(int64_t iterations, int64_t bool_empty_loop);
+        // bool_empty_loop: if non-zero, substract empty loop time.
         // Return: average time of one instruction in iteration body in nanoseconds.
         .macro  xxx_begin symbol
         func    \symbol
@@ -42,6 +43,7 @@
         struct_begin
         struct_field xxx.call_frame, 16 // call frame (x29, x30)
         struct_field xxx.iter, 8        // iteration count
+        struct_field xxx.bel, 8         // bool_empty_loop (if non-zero, substract empty loop time)
         struct_field xxx.time1, 8       // start / duration of main instruction loop
         struct_field xxx.time2, 8       // start of empty loop
         struct_end   xxx.stack_size
@@ -50,6 +52,7 @@
         mov     x29, sp
         // Start of function.
         str     x0, [sp, xxx.iter]
+        str     x1, [sp, xxx.bel]
         mov     x1, #0xCDEF             // x1 = 0x0123456789ABCDEF
         movk    x1, #0x89AB, lsl 16
         movk    x1, #0x4567, lsl 32
@@ -81,8 +84,10 @@
         mrs     x0, cntvct_el0
         str     x0, [sp, xxx.time2]     // time2 = start of second loop
         ldr     x1, [sp, xxx.time1]
-        sub     x2, x0, x1
-        str     x2, [sp, xxx.time1]     // time1 = duration of the instruction loop
+        sub     x0, x0, x1              // x0 = duration of the instruction loop, in virtual timer units
+        ldr     x1, [sp, xxx.bel]       // x1 = bool_empty_loop
+        cbz     x1, 8f                  // branch if don't substract empty loop time
+        str     x0, [sp, xxx.time1]     // time1 = duration of the instruction loop
         ldr     x0, [sp, xxx.iter]
         // Start of empty instruction loop.
 6:      cbz     x0, 7f
@@ -95,7 +100,7 @@
         sub     x2, x0, x1              // x2 = duration of empty loop
         ldr     x1, [sp, xxx.time1]     // x1 = duration of the instruction loop
         sub     x0, x1, x2              // x0 = instructions duration, in virtual timer units
-        ucvtf   d0, x0
+8:      ucvtf   d0, x0
         mov     x1, #0xCA00             // x1 = 0x3B9ACA00 = 1 billion = nano-sec / sec
         movk    x1, #0x3B9A, lsl 16
         ucvtf   d1, x1
@@ -240,6 +245,27 @@
         mul     x15, x1, x2
         adcs    x16, x1, x2
         mul     x17, x1, x2
+        adcs    x18, x1, x2
+        .endr
+        xxx_end
+
+        xxx_begin xxx_umulh_adcs
+        .rept   2
+        umulh   x3, x1, x2
+        adcs    x4, x1, x2
+        umulh   x5, x1, x2
+        adcs    x6, x1, x2
+        umulh   x7, x1, x2
+        adcs    x8, x1, x2
+        umulh   x9, x1, x2
+        adcs    x10, x1, x2
+        umulh   x11, x1, x2
+        adcs    x12, x1, x2
+        umulh   x13, x1, x2
+        adcs    x14, x1, x2
+        umulh   x15, x1, x2
+        adcs    x16, x1, x2
+        umulh   x17, x1, x2
         adcs    x18, x1, x2
         .endr
         xxx_end
