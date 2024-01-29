@@ -468,6 +468,222 @@
         .endr
         xxx_end
 
+        xxx_begin xxx_umulh_nop_adcs
+        umulh   x3, x1, x2
+        nop
+        adcs    x5, x1, x2
+        umulh   x6, x1, x2
+        nop
+        adcs    x8, x1, x2
+        umulh   x9, x1, x2
+        nop
+        adcs    x11, x1, x2
+        umulh   x12, x1, x2
+        nop
+        adcs    x14, x1, x2
+        umulh   x15, x1, x2
+        nop
+        adcs    x17, x1, x2
+        umulh   x18, x1, x2
+        nop
+        adcs    x4, x1, x2
+        umulh   x5, x1, x2
+        nop
+        adcs    x7, x1, x2
+        umulh   x8, x1, x2
+        nop
+        adcs    x10, x1, x2
+        umulh   x11, x1, x2
+        nop
+        adcs    x13, x1, x2
+        umulh   x14, x1, x2
+        nop
+        adcs    x16, x1, x2
+        umulh   x17, x1, x2
+        nop
+        adcs    x10, x1, x2
+        xxx_end
+
+        xxx_begin xxx_umulh_adds_adcs
+        umulh   x3, x1, x2
+        adds    x4, x1, x2
+        adcs    x5, x1, x2
+        umulh   x6, x1, x2
+        adds    x7, x1, x2
+        adcs    x8, x1, x2
+        umulh   x9, x1, x2
+        adds    x10, x1, x2
+        adcs    x11, x1, x2
+        umulh   x12, x1, x2
+        adds    x13, x1, x2
+        adcs    x14, x1, x2
+        umulh   x15, x1, x2
+        adds    x16, x1, x2
+        adcs    x17, x1, x2
+        umulh   x18, x1, x2
+        adds    x3, x1, x2
+        adcs    x4, x1, x2
+        umulh   x5, x1, x2
+        adds    x6, x1, x2
+        adcs    x7, x1, x2
+        umulh   x8, x1, x2
+        adds    x9, x1, x2
+        adcs    x10, x1, x2
+        umulh   x11, x1, x2
+        adds    x12, x1, x2
+        adcs    x13, x1, x2
+        umulh   x14, x1, x2
+        adds    x15, x1, x2
+        adcs    x16, x1, x2
+        umulh   x17, x1, x2
+        adds    x18, x1, x2
+        adcs    x10, x1, x2
+        xxx_end
+
+        xxx_begin xxx_umulh_add_adcs
+        umulh   x3, x1, x2
+        add     x4, x1, x2
+        adcs    x5, x1, x2
+        umulh   x6, x1, x2
+        add     x7, x1, x2
+        adcs    x8, x1, x2
+        umulh   x9, x1, x2
+        add     x10, x1, x2
+        adcs    x11, x1, x2
+        umulh   x12, x1, x2
+        add     x13, x1, x2
+        adcs    x14, x1, x2
+        umulh   x15, x1, x2
+        add     x16, x1, x2
+        adcs    x17, x1, x2
+        umulh   x18, x1, x2
+        add     x3, x1, x2
+        adcs    x4, x1, x2
+        umulh   x5, x1, x2
+        add     x6, x1, x2
+        adcs    x7, x1, x2
+        umulh   x8, x1, x2
+        add     x9, x1, x2
+        adcs    x10, x1, x2
+        umulh   x11, x1, x2
+        add     x12, x1, x2
+        adcs    x13, x1, x2
+        umulh   x14, x1, x2
+        add     x15, x1, x2
+        adcs    x16, x1, x2
+        umulh   x17, x1, x2
+        add     x18, x1, x2
+        adcs    x10, x1, x2
+        xxx_end
+
+        xxx_begin xxx_umulh_adcs_adcs
+        umulh   x3, x1, x2
+        adcs    x4, x1, x2
+        adcs    x5, x1, x2
+        umulh   x6, x1, x2
+        adcs    x7, x1, x2
+        adcs    x8, x1, x2
+        umulh   x9, x1, x2
+        adcs    x10, x1, x2
+        adcs    x11, x1, x2
+        umulh   x12, x1, x2
+        adcs    x13, x1, x2
+        adcs    x14, x1, x2
+        umulh   x15, x1, x2
+        adcs    x16, x1, x2
+        adcs    x17, x1, x2
+        umulh   x18, x1, x2
+        adcs    x3, x1, x2
+        adcs    x4, x1, x2
+        umulh   x5, x1, x2
+        adcs    x6, x1, x2
+        adcs    x7, x1, x2
+        umulh   x8, x1, x2
+        adcs    x9, x1, x2
+        adcs    x10, x1, x2
+        umulh   x11, x1, x2
+        adcs    x12, x1, x2
+        adcs    x13, x1, x2
+        umulh   x14, x1, x2
+        adcs    x15, x1, x2
+        adcs    x16, x1, x2
+        umulh   x17, x1, x2
+        adcs    x18, x1, x2
+        adcs    x10, x1, x2
+        xxx_end
+
+        xxx_begin xxx_umulh_adc_adds
+        umulh   x3, x1, x2
+        adc     x4, x1, x2
+        adds    x5, x1, x2
+        umulh   x6, x1, x2
+        adc     x7, x1, x2
+        adds    x8, x1, x2
+        umulh   x9, x1, x2
+        adc     x10, x1, x2
+        adds    x11, x1, x2
+        umulh   x12, x1, x2
+        adc     x13, x1, x2
+        adds    x14, x1, x2
+        umulh   x15, x1, x2
+        adc     x16, x1, x2
+        adds    x17, x1, x2
+        umulh   x18, x1, x2
+        adc     x3, x1, x2
+        adds    x4, x1, x2
+        umulh   x5, x1, x2
+        adc     x6, x1, x2
+        adds    x7, x1, x2
+        umulh   x8, x1, x2
+        adc     x9, x1, x2
+        adds    x10, x1, x2
+        umulh   x11, x1, x2
+        adc     x12, x1, x2
+        adds    x13, x1, x2
+        umulh   x14, x1, x2
+        adc     x15, x1, x2
+        adds    x16, x1, x2
+        umulh   x17, x1, x2
+        adc     x18, x1, x2
+        adds    x10, x1, x2
+        xxx_end
+
+        xxx_begin xxx_umulh_adc_adds_depreg
+        umulh   x3, x1, x2
+        adc     x4, x1, x2
+        adds    x5, x4, x2
+        umulh   x6, x1, x2
+        adc     x7, x1, x2
+        adds    x8, x7, x2
+        umulh   x9, x1, x2
+        adc     x10, x1, x2
+        adds    x11, x10, x2
+        umulh   x12, x1, x2
+        adc     x13, x1, x2
+        adds    x14, x13, x2
+        umulh   x15, x1, x2
+        adc     x16, x1, x2
+        adds    x17, x16, x2
+        umulh   x18, x1, x2
+        adc     x3, x1, x2
+        adds    x4, x3, x2
+        umulh   x5, x1, x2
+        adc     x6, x1, x2
+        adds    x7, x6, x2
+        umulh   x8, x1, x2
+        adc     x9, x1, x2
+        adds    x10, x9, x2
+        umulh   x11, x1, x2
+        adc     x12, x1, x2
+        adds    x13, x12, x2
+        umulh   x14, x1, x2
+        adc     x15, x1, x2
+        adds    x16, x15, x2
+        umulh   x17, x1, x2
+        adc     x18, x1, x2
+        adds    x10, x18, x2
+        xxx_end
+
         xxx_begin xxx_mul_adcs_umulh_adcs
         .rept   2
         mul     x3, x1, x2

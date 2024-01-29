@@ -29,7 +29,7 @@ int has_pac()
 // Declare and run one test.
 #define TEST(name, iterations, bool_empty_loop)                            \
     extern double xxx_##name(int64_t count, int64_t bel) asm("xxx_"#name); \
-    printf("%-20s %.3f ns/inst\n", #name, xxx_##name(iterations, bool_empty_loop))
+    printf("%-22s %.3f ns/inst\n", #name, xxx_##name(iterations, bool_empty_loop))
 
 // 100 million iterations as reference.
 #define REFCOUNT 100000000
@@ -58,6 +58,12 @@ int main(int argc, char* argv[])
         TEST(umulh_adds, REFCOUNT, bel);
         TEST(umulh_adcs, REFCOUNT, bel);
         TEST(umulh_adcs_alt, REFCOUNT, bel);
+        TEST(umulh_nop_adcs, REFCOUNT, bel);
+        TEST(umulh_add_adcs, REFCOUNT, bel);
+        TEST(umulh_adds_adcs, REFCOUNT, bel);
+        TEST(umulh_adcs_adcs, REFCOUNT, bel);
+        TEST(umulh_adc_adds, REFCOUNT, bel);
+        TEST(umulh_adc_adds_depreg, REFCOUNT, bel);
         TEST(mul_add_umulh_add, REFCOUNT, bel);
         if (has_pac()) {
             TEST(pacia, REFCOUNT, bel);
