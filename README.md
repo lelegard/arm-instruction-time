@@ -114,7 +114,8 @@ and the corresponding relative performance information.
 | PACIA AUTIA                         |            |             | 0.373       | 0.303    |
 | PACIA ... AUTIA ...                 |            |             | 0.373       | 0.303    |
 
-Reference public documents:
+### Reference public documents
+
 - [Arm Cortex A72 Core Software Optimization Guide](https://developer.arm.com/documentation/uan0016/latest/)
 - [Arm Neoverse N1 Core Software Optimization Guide](https://developer.arm.com/documentation/pjdoc466751330-9707/latest/)
 - [Arm Neoverse V1 Software Optimization Guide](https://developer.arm.com/documentation/pjdoc466751330-9685/latest/)
