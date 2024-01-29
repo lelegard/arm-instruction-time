@@ -50,6 +50,10 @@ When PAC instructions are disabled (architecture `arm64`), they execute at the s
 Therefore, the PAC tests are skipped in this configuration to avoid reporting
 non-significant instruction time.
 
+The tables below give the mean instruction time, in nanoseconds, in each loop.
+The Excel file in this project adds the frequency information of each core
+and the corresponding relative performance information.
+
 ### Ignoring the empty loop time
 
 | Mean instruction time (nanoseconds) | Cortex A72 | Neoverse N1 | Neoverse V1 | Apple M1 |
@@ -109,3 +113,9 @@ non-significant instruction time.
 | AUTIA                               |            |             | 0.373       | 0.303    |
 | PACIA AUTIA                         |            |             | 0.373       | 0.303    |
 | PACIA ... AUTIA ...                 |            |             | 0.373       | 0.303    |
+
+Reference public documents:
+- [Arm Cortex A72 Core Software Optimization Guide](https://developer.arm.com/documentation/uan0016/latest/)
+- [Arm Neoverse N1 Core Software Optimization Guide](https://developer.arm.com/documentation/pjdoc466751330-9707/latest/)
+- [Arm Neoverse V1 Software Optimization Guide](https://developer.arm.com/documentation/pjdoc466751330-9685/latest/)
+- [Apple M1 Microarchitecture Research by Dougall Johnson](https://dougallj.github.io/applecpu/firestorm.html) (unofficial reverse engineering works)
