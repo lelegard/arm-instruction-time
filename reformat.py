@@ -79,6 +79,8 @@ for dat in [e['data'] for e in tables]:
         l = len(f) - 1
         if f[l] == 'ALT':
             f[l] = '(alt)'
+        elif f[l] == 'DEPREG':
+            f[l] = '(dep. regs)'
         elif f[l] == '2':
             f.pop()
             for x in range(len(f), 0, -1):
