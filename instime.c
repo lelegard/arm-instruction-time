@@ -27,8 +27,8 @@ int has_pac()
 }
 
 // Declare and run one test.
-#define TEST(name, iterations, bool_empty_loop)                                         \
-    extern double xxx_##name(int64_t count, int64_t bel) asm("xxx_"#name);          \
+#define TEST(name, iterations, bool_empty_loop)                            \
+    extern double xxx_##name(int64_t count, int64_t bel) asm("xxx_"#name); \
     printf("%-20s %.3f ns/inst\n", #name, xxx_##name(iterations, bool_empty_loop))
 
 // 100 million iterations as reference.
@@ -45,11 +45,19 @@ int main(int argc, char* argv[])
         TEST(adcs, REFCOUNT, bel);
         TEST(mul, REFCOUNT, bel);
         TEST(umulh, REFCOUNT, bel);
-        TEST(div, REFCOUNT, bel);
+        TEST(div, REFCOUNT / 2, bel);
         TEST(mul_umulh, REFCOUNT, bel);
         TEST(mul_adcs_umulh_adcs, REFCOUNT, bel);
+        TEST(mul_add, REFCOUNT, bel);
+        TEST(mul_adc, REFCOUNT, bel);
+        TEST(mul_adds, REFCOUNT, bel);
         TEST(mul_adcs, REFCOUNT, bel);
+        TEST(mul_adcs_alt, REFCOUNT, bel);
+        TEST(umulh_add, REFCOUNT, bel);
+        TEST(umulh_adc, REFCOUNT, bel);
+        TEST(umulh_adds, REFCOUNT, bel);
         TEST(umulh_adcs, REFCOUNT, bel);
+        TEST(umulh_adcs_alt, REFCOUNT, bel);
         TEST(mul_add_umulh_add, REFCOUNT, bel);
         if (has_pac()) {
             TEST(pacia, REFCOUNT, bel);

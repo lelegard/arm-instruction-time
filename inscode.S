@@ -37,19 +37,36 @@
         // Profile: double func(int64_t iterations, int64_t bool_empty_loop);
         // bool_empty_loop: if non-zero, substract empty loop time.
         // Return: average time of one instruction in iteration body in nanoseconds.
+        //
+        // Available registers in tested instruction loop:
+        // - x0 : iteration count in x0
+        // - x1-x2: generic operands, fixed values
+        // - x3-x15: free to use without breaking the ABI.
+        // - x16-x18: temporary registers.
+        // - x19-x28: saved registers, initially contains same fixed values as x1, x2 (by pairs)
         .macro  xxx_begin symbol
         func    \symbol
         // Stack frame layout.
         struct_begin
-        struct_field xxx.call_frame, 16 // call frame (x29, x30)
-        struct_field xxx.iter, 8        // iteration count
-        struct_field xxx.bel, 8         // bool_empty_loop (if non-zero, substract empty loop time)
-        struct_field xxx.time1, 8       // start / duration of main instruction loop
-        struct_field xxx.time2, 8       // start of empty loop
+        struct_field xxx.call_frame, 16     // call frame (x29, x30)
+        struct_field xxx.saved_x19_x20, 16  // saved registers x19, x20
+        struct_field xxx.saved_x21_x22, 16  // saved registers x21, x22
+        struct_field xxx.saved_x23_x24, 16  // saved registers x23, x24
+        struct_field xxx.saved_x25_x26, 16  // saved registers x25, x26
+        struct_field xxx.saved_x27_x28, 16  // saved registers x27, x28
+        struct_field xxx.iter, 8            // iteration count
+        struct_field xxx.bel, 8             // bool_empty_loop (if non-zero, substract empty loop time)
+        struct_field xxx.time1, 8           // start / duration of main instruction loop
+        struct_field xxx.time2, 8           // start of empty loop
         struct_end   xxx.stack_size
         // Function prolog.
         stp     x29, x30, [sp, -xxx.stack_size]!
         mov     x29, sp
+        stp     x19, x20, [sp, xxx.saved_x19_x20]
+        stp     x21, x22, [sp, xxx.saved_x21_x22]
+        stp     x23, x24, [sp, xxx.saved_x23_x24]
+        stp     x25, x26, [sp, xxx.saved_x25_x26]
+        stp     x27, x28, [sp, xxx.saved_x27_x28]
         // Start of function.
         str     x0, [sp, xxx.iter]
         str     x1, [sp, xxx.bel]
@@ -57,18 +74,24 @@
         movk    x1, #0x89AB, lsl 16
         movk    x1, #0x4567, lsl 32
         movk    x1, #0x0123, lsl 48
+        mov     x19, x1                 // x19 = x21 = x23 = x25 = x27 = x1
+        mov     x21, x1
+        mov     x23, x1
+        mov     x25, x1
+        mov     x27, x1
         mov     x2, #0x3210             // x2 = 0xFEDCBA9876543210
         movk    x2, #0x7654, lsl 16
         movk    x2, #0xBA98, lsl 32
         movk    x2, #0xFEDC, lsl 48
+        mov     x20, x2                 // x20 = x22 = x24 = x26 = x28 = x2
+        mov     x22, x2
+        mov     x24, x2
+        mov     x26, x2
+        mov     x28, x2
         isb                             // instruction barrier before getting timer counter
         mrs     x1, cntvct_el0          // virtual timer counter
         str     x1, [sp, xxx.time1]
         // Start of main instruction loop.
-        // Iteration count in x0, generic operands in x1 and x2.
-        // 16 available registers:
-        // - x3-x15: free to use without breaking the ABI.
-        // - x16-x18: temporary registers.
 1:      cbz     x0, 5f
         sub     x0, x0, #1
 3:
@@ -114,6 +137,11 @@
         ucvtf   d2, x2
         fdiv    d0, d3, d2              // d0 (result) = average duration of one instruction in nanoseconds
         // Function epilog
+        ldp     x19, x20, [sp, xxx.saved_x19_x20]
+        ldp     x21, x22, [sp, xxx.saved_x21_x22]
+        ldp     x23, x24, [sp, xxx.saved_x23_x24]
+        ldp     x25, x26, [sp, xxx.saved_x25_x26]
+        ldp     x27, x28, [sp, xxx.saved_x27_x28]
         ldp     x29, x30, [sp], xxx.stack_size
         ret
         .endm
@@ -228,6 +256,69 @@
         .endr
         xxx_end
 
+        xxx_begin xxx_mul_add
+        .rept   2
+        mul     x3, x1, x2
+        add     x4, x1, x2
+        mul     x5, x1, x2
+        add     x6, x1, x2
+        mul     x7, x1, x2
+        add     x8, x1, x2
+        mul     x9, x1, x2
+        add     x10, x1, x2
+        mul     x11, x1, x2
+        add     x12, x1, x2
+        mul     x13, x1, x2
+        add     x14, x1, x2
+        mul     x15, x1, x2
+        add     x16, x1, x2
+        mul     x17, x1, x2
+        add     x18, x1, x2
+        .endr
+        xxx_end
+
+        xxx_begin xxx_mul_adc
+        .rept   2
+        mul     x3, x1, x2
+        adc     x4, x1, x2
+        mul     x5, x1, x2
+        adc     x6, x1, x2
+        mul     x7, x1, x2
+        adc     x8, x1, x2
+        mul     x9, x1, x2
+        adc     x10, x1, x2
+        mul     x11, x1, x2
+        adc     x12, x1, x2
+        mul     x13, x1, x2
+        adc     x14, x1, x2
+        mul     x15, x1, x2
+        adc     x16, x1, x2
+        mul     x17, x1, x2
+        adc     x18, x1, x2
+        .endr
+        xxx_end
+
+        xxx_begin xxx_mul_adds
+        .rept   2
+        mul     x3, x1, x2
+        adds    x4, x1, x2
+        mul     x5, x1, x2
+        adds    x6, x1, x2
+        mul     x7, x1, x2
+        adds    x8, x1, x2
+        mul     x9, x1, x2
+        adds    x10, x1, x2
+        mul     x11, x1, x2
+        adds    x12, x1, x2
+        mul     x13, x1, x2
+        adds    x14, x1, x2
+        mul     x15, x1, x2
+        adds    x16, x1, x2
+        mul     x17, x1, x2
+        adds    x18, x1, x2
+        .endr
+        xxx_end
+
         xxx_begin xxx_mul_adcs
         .rept   2
         mul     x3, x1, x2
@@ -249,6 +340,91 @@
         .endr
         xxx_end
 
+        // same as xxx_mul_adcs but alternate 4 pairs of input registers
+        xxx_begin xxx_mul_adcs_alt
+        .rept   2
+        mul     x3, x1, x2
+        adcs    x4, x19, x20
+        mul     x5, x21, x22
+        adcs    x6, x23, x24
+        mul     x7, x1, x2
+        adcs    x8, x19, x20
+        mul     x9, x21, x22
+        adcs    x10, x23, x24
+        mul     x11, x1, x2
+        adcs    x12, x19, x20
+        mul     x13, x21, x22
+        adcs    x14, x23, x24
+        mul     x15, x1, x2
+        adcs    x16, x19, x20
+        mul     x17, x21, x22
+        adcs    x18, x23, x24
+        .endr
+        xxx_end
+
+        xxx_begin xxx_umulh_add
+        .rept   2
+        umulh   x3, x1, x2
+        add     x4, x1, x2
+        umulh   x5, x1, x2
+        add     x6, x1, x2
+        umulh   x7, x1, x2
+        add     x8, x1, x2
+        umulh   x9, x1, x2
+        add     x10, x1, x2
+        umulh   x11, x1, x2
+        add     x12, x1, x2
+        umulh   x13, x1, x2
+        add     x14, x1, x2
+        umulh   x15, x1, x2
+        add     x16, x1, x2
+        umulh   x17, x1, x2
+        add     x18, x1, x2
+        .endr
+        xxx_end
+
+        xxx_begin xxx_umulh_adc
+        .rept   2
+        umulh   x3, x1, x2
+        adc     x4, x1, x2
+        umulh   x5, x1, x2
+        adc     x6, x1, x2
+        umulh   x7, x1, x2
+        adc     x8, x1, x2
+        umulh   x9, x1, x2
+        adc     x10, x1, x2
+        umulh   x11, x1, x2
+        adc     x12, x1, x2
+        umulh   x13, x1, x2
+        adc     x14, x1, x2
+        umulh   x15, x1, x2
+        adc     x16, x1, x2
+        umulh   x17, x1, x2
+        adc     x18, x1, x2
+        .endr
+        xxx_end
+
+        xxx_begin xxx_umulh_adds
+        .rept   2
+        umulh   x3, x1, x2
+        adds    x4, x1, x2
+        umulh   x5, x1, x2
+        adds    x6, x1, x2
+        umulh   x7, x1, x2
+        adds    x8, x1, x2
+        umulh   x9, x1, x2
+        adds    x10, x1, x2
+        umulh   x11, x1, x2
+        adds    x12, x1, x2
+        umulh   x13, x1, x2
+        adds    x14, x1, x2
+        umulh   x15, x1, x2
+        adds    x16, x1, x2
+        umulh   x17, x1, x2
+        adds    x18, x1, x2
+        .endr
+        xxx_end
+
         xxx_begin xxx_umulh_adcs
         .rept   2
         umulh   x3, x1, x2
@@ -267,6 +443,28 @@
         adcs    x16, x1, x2
         umulh   x17, x1, x2
         adcs    x18, x1, x2
+        .endr
+        xxx_end
+
+        // same as xxx_umulh_adcs but alternate 4 pairs of input registers
+        xxx_begin xxx_umulh_adcs_alt
+        .rept   2
+        umulh   x3, x1, x2
+        adcs    x4, x19, x20
+        umulh   x5, x21, x22
+        adcs    x6, x23, x24
+        umulh   x7, x1, x2
+        adcs    x8, x19, x20
+        umulh   x9, x21, x22
+        adcs    x10, x23, x24
+        umulh   x11, x1, x2
+        adcs    x12, x19, x20
+        umulh   x13, x21, x22
+        adcs    x14, x23, x24
+        umulh   x15, x1, x2
+        adcs    x16, x19, x20
+        umulh   x17, x21, x22
+        adcs    x18, x23, x24
         .endr
         xxx_end
 
