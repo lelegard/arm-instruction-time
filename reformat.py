@@ -3,7 +3,7 @@
 # Reformat result files into markdown tables for insertion in README.md and CSV for Excel.
 #
 
-import os, sys, re, string
+import os, sys, re
 
 # List of CPU cores and corresponding result files.
 results = [
