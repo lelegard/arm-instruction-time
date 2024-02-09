@@ -6,7 +6,7 @@ adds                   0.131 ns/inst
 adcs                   0.388 ns/inst
 mul                    0.193 ns/inst
 umulh                  0.193 ns/inst
-div                    3.466 ns/inst
+div                    2.311 ns/inst
 mul_umulh              0.193 ns/inst
 mul_adcs_umulh_adcs    0.294 ns/inst
 mul_add                0.105 ns/inst
@@ -38,7 +38,7 @@ adds                   0.119 ns/inst
 adcs                   0.376 ns/inst
 mul                    0.181 ns/inst
 umulh                  0.181 ns/inst
-div                    3.454 ns/inst
+div                    2,299 ns/inst
 mul_umulh              0.181 ns/inst
 mul_adcs_umulh_adcs    0.282 ns/inst
 mul_add                0.093 ns/inst

@@ -89,8 +89,8 @@
         mov     x26, x2
         mov     x28, x2
         isb                             // instruction barrier before getting timer counter
-        mrs     x1, cntvct_el0          // virtual timer counter
-        str     x1, [sp, xxx.time1]
+        mrs     x3, cntvct_el0          // virtual timer counter
+        str     x3, [sp, xxx.time1]
         // Start of main instruction loop.
 1:      cbz     x0, 5f
         sub     x0, x0, #1
