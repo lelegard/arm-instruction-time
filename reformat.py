@@ -10,6 +10,7 @@ results = [
     {'core': 'Cortex A72',  'file': 'raspberrypi4_cortex_a72.txt'},
     {'core': 'Neoverse N1', 'file': 'ampere_altra_neoverse_n1.txt'},
     {'core': 'Neoverse V1', 'file': 'aws_graviton3_neoverse_v1.txt'},
+    {'core': 'Neoverse V2', 'file': 'nvidia_grace_neoverse_v2.txt'},
     {'core': 'Apple M1',    'file': 'apple_m1.txt'}
 ]
 
