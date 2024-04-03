@@ -25,12 +25,13 @@ As a general rule, inside a loop, all input registers are identical and at least
 
 ## Tested systems
 
-| System                      | CPU chip         | CPU core                 |
-| --------------------------- | ---------------- | ------------------------ |
-| Raspberry Pi 4 Model B      | Broadcom BCM2711 | Arm Cortex A72           |
-| Ampere Mt.Jade Server       | Ampere Altra     | Arm Neoverse N1          |
-| AWS EC2 instance c7g.xlarge | AWS Graviton 3   | Arm Neoverse V1          |
-| Apple MacBook M1            | Apple M1         | Apple Firestorm/Icestorm |
+| System                      | CPU chip               | CPU core                 |
+| --------------------------- | ---------------------- | ------------------------ |
+| Raspberry Pi 4 Model B      | Broadcom BCM2711       | Arm Cortex A72           |
+| Ampere Mt.Jade Server       | Ampere Altra           | Arm Neoverse N1          |
+| AWS EC2 instance c7g.xlarge | AWS Graviton 3         | Arm Neoverse V1          |
+| Supermicro ARS-221GL-NR     | Nvidia Grace Superchip | Arm Neoverse V2          |
+| Apple MacBook M1            | Apple M1               | Apple Firestorm/Icestorm |
 
 The Apple M1 CPU was tested using macOS. All other CPU's were tested on Linux.
 
