@@ -33,17 +33,23 @@
         \size_name = .struct_offset
         .endm
 
+        // Available registers in tested instruction loop:
+        // - x0: iteration count in x0, don't modify
+        // - x1-x2: generic operands, initial values 0x0123456789ABCDEF and 0xFEDCBA9876543210
+        // - x3-x15: free to use without breaking the ABI, initially zero
+        // - x16-x17: temporary registers, initially zero
+        // - x18: don't use, forbidden by Arm ABI (random crash on Apple M3 if used)
+        // - x19-x20: saved registers, initially zero
+        // - x21-x28: saved registers, initially contains same fixed values as x1, x2 (by pairs)
+
+        // 16 scratch registers, initially zero:
+#define ALL_REGS 3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,19
+        
         // Prolog of all functions in this module.
         // Profile: double func(int64_t iterations, int64_t bool_empty_loop);
         // bool_empty_loop: if non-zero, substract empty loop time.
         // Return: average time of one instruction in iteration body in nanoseconds.
         //
-        // Available registers in tested instruction loop:
-        // - x0 : iteration count in x0
-        // - x1-x2: generic operands, fixed values
-        // - x3-x15: free to use without breaking the ABI.
-        // - x16-x18: temporary registers.
-        // - x19-x28: saved registers, initially contains same fixed values as x1, x2 (by pairs)
         .macro  xxx_begin symbol
         func    \symbol
         // Stack frame layout.
@@ -74,8 +80,7 @@
         movk    x1, #0x89AB, lsl 16
         movk    x1, #0x4567, lsl 32
         movk    x1, #0x0123, lsl 48
-        mov     x19, x1                 // x19 = x21 = x23 = x25 = x27 = x1
-        mov     x21, x1
+        mov     x21, x1                 // x21 = x23 = x25 = x27 = x1
         mov     x23, x1
         mov     x25, x1
         mov     x27, x1
@@ -83,22 +88,23 @@
         movk    x2, #0x7654, lsl 16
         movk    x2, #0xBA98, lsl 32
         movk    x2, #0xFEDC, lsl 48
-        mov     x20, x2                 // x20 = x22 = x24 = x26 = x28 = x2
-        mov     x22, x2
+        mov     x22, x2                 // x22 = x24 = x26 = x28 = x2
         mov     x24, x2
         mov     x26, x2
         mov     x28, x2
+        .irp    reg,ALL_REGS            // clear 16 scratch registers
+        mov     x\reg, #0
+        .endr
         isb                             // instruction barrier before getting timer counter
-        mrs     x3, cntvct_el0          // virtual timer counter
-        str     x3, [sp, xxx.time1]
+        mrs     x20, cntvct_el0         // virtual timer counter
+        str     x20, [sp, xxx.time1]
+        mov     x20, #0                 // and set x20 as scratch register
         // Start of main instruction loop.
 1:      cbz     x0, 5f
         sub     x0, x0, #1
 3:
         .endm
 
-#define ALL_REGS 3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18
-        
         // End of all functions.
         .macro  xxx_end
 4:      b       1b                      // Loop back to instruction sequence.
@@ -231,7 +237,7 @@
         mul     x15, x1, x2
         umulh   x16, x1, x2
         mul     x17, x1, x2
-        umulh   x18, x1, x2
+        umulh   x19, x1, x2     // don't use x18
         .endr
         xxx_end
 
@@ -252,7 +258,7 @@
         mul     x15, x1, x2
         add     x16, x1, x2
         umulh   x17, x1, x2
-        add     x18, x1, x2
+        add     x19, x1, x2     // don't use x18
         .endr
         xxx_end
 
@@ -273,7 +279,7 @@
         mul     x15, x1, x2
         add     x16, x1, x2
         mul     x17, x1, x2
-        add     x18, x1, x2
+        add     x19, x1, x2     // don't use x18
         .endr
         xxx_end
 
@@ -294,7 +300,7 @@
         mul     x15, x1, x2
         adc     x16, x1, x2
         mul     x17, x1, x2
-        adc     x18, x1, x2
+        adc     x19, x1, x2     // don't use x18
         .endr
         xxx_end
 
@@ -315,7 +321,7 @@
         mul     x15, x1, x2
         adds    x16, x1, x2
         mul     x17, x1, x2
-        adds    x18, x1, x2
+        adds    x19, x1, x2     // don't use x18
         .endr
         xxx_end
 
@@ -336,7 +342,7 @@
         mul     x15, x1, x2
         adcs    x16, x1, x2
         mul     x17, x1, x2
-        adcs    x18, x1, x2
+        adcs    x19, x1, x2     // don't use x18
         .endr
         xxx_end
 
@@ -344,21 +350,21 @@
         xxx_begin xxx_mul_adcs_alt
         .rept   2
         mul     x3, x1, x2
-        adcs    x4, x19, x20
-        mul     x5, x21, x22
-        adcs    x6, x23, x24
+        adcs    x4, x21, x22
+        mul     x5, x23, x24
+        adcs    x6, x25, x26
         mul     x7, x1, x2
-        adcs    x8, x19, x20
-        mul     x9, x21, x22
-        adcs    x10, x23, x24
+        adcs    x8, x21, x22
+        mul     x9, x23, x24
+        adcs    x10, x25, x26
         mul     x11, x1, x2
-        adcs    x12, x19, x20
-        mul     x13, x21, x22
-        adcs    x14, x23, x24
+        adcs    x12, x21, x22
+        mul     x13, x23, x24
+        adcs    x14, x25, x26
         mul     x15, x1, x2
-        adcs    x16, x19, x20
-        mul     x17, x21, x22
-        adcs    x18, x23, x24
+        adcs    x16, x21, x22
+        mul     x17, x23, x24
+        adcs    x19, x25, x26     // don't use x18
         .endr
         xxx_end
 
@@ -379,7 +385,7 @@
         umulh   x15, x1, x2
         add     x16, x1, x2
         umulh   x17, x1, x2
-        add     x18, x1, x2
+        add     x19, x1, x2     // don't use x18
         .endr
         xxx_end
 
@@ -400,7 +406,7 @@
         umulh   x15, x1, x2
         adc     x16, x1, x2
         umulh   x17, x1, x2
-        adc     x18, x1, x2
+        adc     x19, x1, x2     // don't use x18
         .endr
         xxx_end
 
@@ -421,7 +427,7 @@
         umulh   x15, x1, x2
         adds    x16, x1, x2
         umulh   x17, x1, x2
-        adds    x18, x1, x2
+        adds    x19, x1, x2     // don't use x18
         .endr
         xxx_end
 
@@ -442,7 +448,7 @@
         umulh   x15, x1, x2
         adcs    x16, x1, x2
         umulh   x17, x1, x2
-        adcs    x18, x1, x2
+        adcs    x19, x1, x2     // don't use x18
         .endr
         xxx_end
 
@@ -450,21 +456,21 @@
         xxx_begin xxx_umulh_adcs_alt
         .rept   2
         umulh   x3, x1, x2
-        adcs    x4, x19, x20
-        umulh   x5, x21, x22
-        adcs    x6, x23, x24
+        adcs    x4, x21, x22
+        umulh   x5, x23, x24
+        adcs    x6, x25, x26
         umulh   x7, x1, x2
-        adcs    x8, x19, x20
-        umulh   x9, x21, x22
-        adcs    x10, x23, x24
+        adcs    x8, x21, x22
+        umulh   x9, x23, x24
+        adcs    x10, x25, x26
         umulh   x11, x1, x2
-        adcs    x12, x19, x20
-        umulh   x13, x21, x22
-        adcs    x14, x23, x24
+        adcs    x12, x21, x22
+        umulh   x13, x23, x24
+        adcs    x14, x25, x26
         umulh   x15, x1, x2
-        adcs    x16, x19, x20
-        umulh   x17, x21, x22
-        adcs    x18, x23, x24
+        adcs    x16, x21, x22
+        umulh   x17, x23, x24
+        adcs    x19, x25, x26     // don't use x18
         .endr
         xxx_end
 
@@ -484,7 +490,7 @@
         umulh   x15, x1, x2
         nop
         adcs    x17, x1, x2
-        umulh   x18, x1, x2
+        umulh   x19, x1, x2     // don't use x18
         nop
         adcs    x4, x1, x2
         umulh   x5, x1, x2
@@ -501,7 +507,7 @@
         adcs    x16, x1, x2
         umulh   x17, x1, x2
         nop
-        adcs    x10, x1, x2
+        adcs    x19, x1, x2     // don't use x18
         xxx_end
 
         xxx_begin xxx_umulh_adds_adcs
@@ -520,7 +526,7 @@
         umulh   x15, x1, x2
         adds    x16, x1, x2
         adcs    x17, x1, x2
-        umulh   x18, x1, x2
+        umulh   x19, x1, x2     // don't use x18
         adds    x3, x1, x2
         adcs    x4, x1, x2
         umulh   x5, x1, x2
@@ -536,8 +542,8 @@
         adds    x15, x1, x2
         adcs    x16, x1, x2
         umulh   x17, x1, x2
-        adds    x18, x1, x2
-        adcs    x10, x1, x2
+        adds    x19, x1, x2     // don't use x18
+        adcs    x20, x1, x2
         xxx_end
 
         xxx_begin xxx_umulh_add_adcs
@@ -556,7 +562,7 @@
         umulh   x15, x1, x2
         add     x16, x1, x2
         adcs    x17, x1, x2
-        umulh   x18, x1, x2
+        umulh   x19, x1, x2     // don't use x18
         add     x3, x1, x2
         adcs    x4, x1, x2
         umulh   x5, x1, x2
@@ -572,8 +578,8 @@
         add     x15, x1, x2
         adcs    x16, x1, x2
         umulh   x17, x1, x2
-        add     x18, x1, x2
-        adcs    x10, x1, x2
+        add     x19, x1, x2     // don't use x18
+        adcs    x20, x1, x2
         xxx_end
 
         xxx_begin xxx_umulh_adcs_adcs
@@ -592,7 +598,7 @@
         umulh   x15, x1, x2
         adcs    x16, x1, x2
         adcs    x17, x1, x2
-        umulh   x18, x1, x2
+        umulh   x19, x1, x2     // don't use x18
         adcs    x3, x1, x2
         adcs    x4, x1, x2
         umulh   x5, x1, x2
@@ -608,8 +614,8 @@
         adcs    x15, x1, x2
         adcs    x16, x1, x2
         umulh   x17, x1, x2
-        adcs    x18, x1, x2
-        adcs    x10, x1, x2
+        adcs    x19, x1, x2     // don't use x18
+        adcs    x20, x1, x2
         xxx_end
 
         xxx_begin xxx_umulh_adc_adds
@@ -628,7 +634,7 @@
         umulh   x15, x1, x2
         adc     x16, x1, x2
         adds    x17, x1, x2
-        umulh   x18, x1, x2
+        umulh   x19, x1, x2     // don't use x18
         adc     x3, x1, x2
         adds    x4, x1, x2
         umulh   x5, x1, x2
@@ -644,8 +650,8 @@
         adc     x15, x1, x2
         adds    x16, x1, x2
         umulh   x17, x1, x2
-        adc     x18, x1, x2
-        adds    x10, x1, x2
+        adc     x19, x1, x2     // don't use x18
+        adds    x20, x1, x2
         xxx_end
 
         xxx_begin xxx_umulh_adc_adds_depreg
@@ -664,7 +670,7 @@
         umulh   x15, x1, x2
         adc     x16, x1, x2
         adds    x17, x16, x2
-        umulh   x18, x1, x2
+        umulh   x19, x1, x2     // don't use x18
         adc     x3, x1, x2
         adds    x4, x3, x2
         umulh   x5, x1, x2
@@ -680,8 +686,8 @@
         adc     x15, x1, x2
         adds    x16, x15, x2
         umulh   x17, x1, x2
-        adc     x18, x1, x2
-        adds    x10, x18, x2
+        adc     x19, x1, x2     // don't use x18
+        adds    x20, x19, x2
         xxx_end
 
         xxx_begin xxx_mul_adcs_umulh_adcs
@@ -701,7 +707,7 @@
         mul     x15, x1, x2
         adcs    x16, x1, x2
         umulh   x17, x1, x2
-        adcs    x18, x1, x2
+        adcs    x19, x1, x2     // don't use x18
         .endr
         xxx_end
 
@@ -709,14 +715,6 @@
         .rept   2
         .irp    reg,ALL_REGS
         pacia   x\reg, sp
-        .endr
-        .endr
-        xxx_end
-
-        xxx_begin xxx_autia
-        .rept   2
-        .irp    reg,ALL_REGS
-        autia   x\reg, sp
         .endr
         .endr
         xxx_end

@@ -67,7 +67,6 @@ int main(int argc, char* argv[])
         TEST(mul_add_umulh_add, REFCOUNT, bel);
         if (has_pac()) {
             TEST(pacia, REFCOUNT, bel);
-            TEST(autia, REFCOUNT, bel);
             TEST(pacia_autia, REFCOUNT, bel);
             TEST(pacia_autia_2, REFCOUNT, bel);
         }

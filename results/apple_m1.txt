@@ -27,7 +27,6 @@ umulh_adc_adds         0.098 ns/inst
 umulh_adc_adds_depreg  0.210 ns/inst
 mul_add_umulh_add      0.104 ns/inst
 pacia                  0.313 ns/inst
-autia                  0.313 ns/inst
 pacia_autia            0.313 ns/inst
 pacia_autia_2          0.314 ns/inst
 --- Empty loop time removed
@@ -59,6 +58,5 @@ umulh_adc_adds         0.089 ns/inst
 umulh_adc_adds_depreg  0.200 ns/inst
 mul_add_umulh_add      0.095 ns/inst
 pacia                  0.303 ns/inst
-autia                  0.303 ns/inst
 pacia_autia            0.303 ns/inst
 pacia_autia_2          0.303 ns/inst
