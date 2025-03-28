@@ -12,7 +12,8 @@ results = [
     {'core': 'Neoverse V1', 'file': 'aws_graviton3_neoverse_v1.txt'},
     {'core': 'Neoverse V2', 'file': 'nvidia_grace_neoverse_v2.txt'},
     {'core': 'Apple M1',    'file': 'apple_m1.txt'},
-    {'core': 'Apple M3',    'file': 'apple_m3.txt'}
+    {'core': 'Apple M3',    'file': 'apple_m3.txt'},
+    {'core': 'Apple M4',    'file': 'apple_m4.txt'}
 ]
 
 # List of tables of results.
