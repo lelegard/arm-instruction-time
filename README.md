@@ -133,3 +133,6 @@ and the corresponding relative performance information.
 - [Arm Neoverse N1 Core Software Optimization Guide](https://developer.arm.com/documentation/pjdoc466751330-9707/latest/)
 - [Arm Neoverse V1 Software Optimization Guide](https://developer.arm.com/documentation/pjdoc466751330-9685/latest/)
 - [Apple M1 Microarchitecture Research by Dougall Johnson](https://dougallj.github.io/applecpu/firestorm.html) (unofficial reverse engineering works)
+
+A synthesis of the data from the various software optimization guides for Arm Neoverse
+cores is available in the Excel file `arm-neoverse-swog.xlsx`.
